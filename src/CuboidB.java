@@ -113,7 +113,7 @@ public class CuboidB implements Serializable{
 				player.sendMessage(Colors.Yellow + this.welcomeMessage);
 		}
 		// I had to separate the inventory-switching from the rest, to enable nested cuboids
-		if ( this.inventories ){
+		/* TODO if ( this.inventories ){
 			CuboidInventory cuboidInventory;
 			boolean newVisitor = true;
 			if (playerInventories.containsKey(player.getName())){
@@ -140,7 +140,7 @@ public class CuboidB implements Serializable{
 					player.giveItem( new Item(item.itemId, item.amount, item.slot) );
 				}
 			}
-		}
+		}*/
 	}
 	
 	public void playerLeaves( Player player ){
@@ -152,7 +152,7 @@ public class CuboidB implements Serializable{
 			if ( this.farewellMessage != null )
 				player.sendMessage(Colors.Yellow + this.farewellMessage);
 		}
-		if ( this.inventories ){
+		/* TODO if ( this.inventories ){
 			CuboidInventory cuboidInventory = playerInventories.get(player.getName());
 			Inventory insideInventory = player.getInventory();
 			
@@ -169,7 +169,7 @@ public class CuboidB implements Serializable{
 			for (CuboidItem item : cuboidInventory.outside){
 				player.giveItem(new Item(item.itemId, item.amount, item.slot));
 			}
-		}
+		}*/
 	}
 
 	public void printInfos(Player player, boolean players, boolean commands ){

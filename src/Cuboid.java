@@ -120,7 +120,7 @@ public class Cuboid implements Serializable{
 		this.presentPlayers.add(player.getName());
 		if ( this.welcomeMessage != null )
 			player.sendMessage(Colors.Yellow + this.welcomeMessage);
-		if ( this.inventories ){
+		/* TODO if ( this.inventories ){
 			CuboidInventory cuboidInventory;
 			boolean newVisitor = true;
 			if (playerInventories.containsKey(player.getName())){
@@ -149,14 +149,14 @@ public class Cuboid implements Serializable{
 					player.giveItem( new Item(item.itemId, item.amount, item.slot) );
 				}
 			}
-		}
+		}*/
 	}
 	
 	public void playerLeaves( Player player ){
 		this.presentPlayers.remove(player.getName());
 		if ( this.farewellMessage != null )
 			player.sendMessage(Colors.Yellow + this.farewellMessage);
-		if ( this.inventories ){
+		/* TODO if ( this.inventories ){
 			CuboidInventory cuboidInventory = playerInventories.get(player.getName());
 			Inventory insideInventory = player.getInventory();
 			
@@ -175,7 +175,7 @@ public class Cuboid implements Serializable{
 			for (CuboidItem item : cuboidInventory.outside){
 				player.giveItem(new Item(item.itemId, item.amount, item.slot));
 			}
-		}
+		}*/
 	}
 
 	public void printInfos(Player player, boolean allowed, boolean players, boolean commands ){

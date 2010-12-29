@@ -13,8 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CuboidPlugin extends Plugin {
-	// Version 17.9 : 18/12 15h00 GMT+1
-	// for servermod 131
+	// Version 18.00 : 24/12 10h00 GMT+1
+	// for servermod 132
 		
 	public String name = "CuboidPlugin";
 	static final Logger log = Logger.getLogger("Minecraft");
@@ -58,7 +58,7 @@ public class CuboidPlugin extends Plugin {
 	
 	public void enable(){
 		onPluginReload();
-		log.info("CuboidPlugin : initializing v17.9 for hMod 131+");
+		log.info("CuboidPlugin : initializing v18.00 for hMod 132+");
 	}
 	
 	public void disable(){
@@ -411,11 +411,11 @@ public class CuboidPlugin extends Plugin {
 		loader.addListener(PluginLoader.Hook.ITEM_USE, listener, this, PluginListener.Priority.HIGH);
 		loader.addListener(PluginLoader.Hook.BLOCK_PLACE, listener, this, PluginListener.Priority.HIGH);
 		loader.addListener(PluginLoader.Hook.BLOCK_BROKEN, listener, this, PluginListener.Priority.HIGH);
+		loader.addListener(PluginLoader.Hook.OPEN_INVENTORY,listener, this, PluginListener.Priority.MEDIUM);
+		loader.addListener(PluginLoader.Hook.SIGN_CHANGE,listener, this, PluginListener.Priority.MEDIUM);
 		loader.addListener(PluginLoader.Hook.BLOCK_RIGHTCLICKED, listener, this, PluginListener.Priority.HIGH);
 		loader.addListener(PluginLoader.Hook.PLAYER_MOVE, listener, this, PluginListener.Priority.MEDIUM);
 		loader.addListener(PluginLoader.Hook.TELEPORT, listener, this, PluginListener.Priority.MEDIUM);
-		loader.addListener(PluginLoader.Hook.COMPLEX_BLOCK_CHANGE, listener, this, PluginListener.Priority.HIGH);
-		loader.addListener(PluginLoader.Hook.COMPLEX_BLOCK_SEND, listener, this, PluginListener.Priority.HIGH);
 		loader.addListener(PluginLoader.Hook.SERVERCOMMAND, listener, this, PluginListener.Priority.MEDIUM);
 		loader.addListener(PluginLoader.Hook.DISCONNECT, listener, this, PluginListener.Priority.MEDIUM);
 		loader.addListener(PluginLoader.Hook.KICK, listener, this, PluginListener.Priority.MEDIUM);
@@ -1578,31 +1578,31 @@ public class CuboidPlugin extends Plugin {
 			return false;
 	    }
 		
-		public boolean onComplexBlockChange(Player player, ComplexBlock block){
-			if ( block instanceof Chest ){
-				if ( chestProtection && !player.canUseCommand("/ignoresOwnership") ){
-					CuboidC cuboid = CuboidAreas.findCuboidArea(block.getX(), block.getY(), block.getZ());
-					if ( cuboid != null && cuboid.protection ){
-						return !cuboid.isAllowed(player);
-					}
+		public boolean onSignChange(Player player, Sign sign) {
+			if ( chestProtection && !player.canUseCommand("/ignoresOwnership") ){
+				CuboidC cuboid = CuboidAreas.findCuboidArea(sign.getX(), sign.getY(), sign.getZ());
+				if ( cuboid != null && cuboid.protection ){
+					return !cuboid.isAllowed(player);
 				}
-				return isGloballyRestricted(player);
 			}
-			return false;
-		}
+			return isGloballyRestricted(player);
+	    }
 		
-		public boolean onSendComplexBlock(Player player, ComplexBlock block){
-			if ( block instanceof Chest ){
+		public boolean onOpenInventory(Player player, Inventory inventory) {
+			if ( inventory instanceof BaseContainerBlock ){
+				@SuppressWarnings("rawtypes")
+				BaseContainerBlock chest = (BaseContainerBlock)inventory;
 				if ( chestProtection && !player.canUseCommand("/ignoresOwnership") ){
-					CuboidC cuboid = CuboidAreas.findCuboidArea(block.getX(), block.getY(), block.getZ());
+					CuboidC cuboid = CuboidAreas.findCuboidArea(chest.getX(), chest.getY(), chest.getZ());
 					if ( cuboid != null && cuboid.protection ){
 						return !cuboid.isAllowed(player);
 					}
 				}
 				return isGloballyRestricted(player);
 			}
-			return false;
-		}
+				
+	        return false;
+	    }
 		
 		public boolean onDamage(PluginLoader.DamageType type, BaseEntity attacker, BaseEntity defender, int amount) {
 			if ( type == PluginLoader.DamageType.ENTITY && defender.isPlayer()  ){
